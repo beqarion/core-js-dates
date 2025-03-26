@@ -175,8 +175,25 @@ function formatDate(date) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  const date = new Date(year, month - 1);
+  let firstDay = date.getDay();
+
+  date.setMonth(date.getMonth() + 1);
+  date.setDate(0);
+
+  let daysOfMonth = date.getDate();
+
+  let weekendCount = 0;
+  while (daysOfMonth > 0) {
+    firstDay %= 7;
+    if (firstDay === 0 || firstDay === 6) weekendCount += 1;
+
+    firstDay += 1;
+    daysOfMonth -= 1;
+  }
+
+  return weekendCount;
 }
 
 /**
@@ -192,8 +209,28 @@ function getCountWeekendsInMonth(/* month, year */) {
  * Date(2024, 0, 31) => 5
  * Date(2024, 1, 23) => 8
  */
-function getWeekNumberByDate(/* date */) {
-  throw new Error('Not implemented');
+function getWeekNumberByDate(date) {
+  const dayOfWeek = date.getDay();
+  const daysToAdd = 4 - (dayOfWeek === 0 ? 7 : dayOfWeek);
+
+  const thursday = new Date(date);
+  thursday.setDate(date.getDate() + daysToAdd);
+
+  const weekYear = thursday.getFullYear();
+
+  const jan4 = new Date(weekYear, 0, 4);
+  const dayOfJan4 = jan4.getDay();
+
+  const daysToAddJan4 = 4 - (dayOfJan4 === 0 ? 7 : dayOfJan4);
+
+  const firstThursday = new Date(jan4);
+  firstThursday.setDate(jan4.getDate() + daysToAddJan4);
+
+  const days =
+    (thursday.getTime() - firstThursday.getTime()) / (1000 * 60 * 60 * 24);
+
+  const weekNumber = Math.floor(days / 7) + 1;
+  return weekNumber;
 }
 
 /**
@@ -207,8 +244,17 @@ function getWeekNumberByDate(/* date */) {
  * Date(2024, 0, 13) => Date(2024, 8, 13)
  * Date(2023, 1, 1) => Date(2023, 9, 13)
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  const currentYear = new Date(date.getFullYear(), 0);
+  const firstDay = currentYear.getDay();
+  const daysToAdd = firstDay > 5 ? 12 - firstDay : 5 - firstDay;
+  const firstFridayDate = new Date(date);
+  firstFridayDate.setDate(firstFridayDate.getDate() + daysToAdd);
+
+  const the13thFridayDate = new Date(firstFridayDate);
+  the13thFridayDate.setDate(the13thFridayDate.getDate() * 12);
+
+  return the13thFridayDate;
 }
 
 /**
