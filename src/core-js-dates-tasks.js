@@ -255,6 +255,7 @@ function getNextFridayThe13th(date) {
   while (copyDate.getDay() !== 5) {
     copyDate.setMonth(copyDate.getMonth() + 1);
   }
+  
   return copyDate;
 }
 
